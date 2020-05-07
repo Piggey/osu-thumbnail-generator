@@ -1,7 +1,7 @@
 import cv2
 # excpected output: 900x534 jpg file
 
-def editPhoto(cover_filepath, artist, title, player, avatar_path):
+def editThumbnail(cover_filepath, artist, title, player, player_avatar_path):
 
     # resizing, blurring, and applying grayscale to background image
     scale = 534/250
@@ -30,4 +30,4 @@ def editPhoto(cover_filepath, artist, title, player, avatar_path):
     cv2.destroyAllWindows()
 
 # testing purposes
-editPhoto('cover.jpg', 'Very long Arist name for testing', 'Road of Resistance', 'Spare', 'player_avatar.jpg')
+# editPhoto('cover.jpg', 'Very long Arist name for testing', 'Road of Resistance', 'Spare', 'player_avatar.jpg')

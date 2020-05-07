@@ -4,7 +4,7 @@ from sys import argv
 from text_recognition import Recognizer
 from osu_api import OsuApi
 import cv2, requests
-from photo_edition import editPhoto
+from thumbnail_edition import editThumbnail
 
 # beatmap cover size: 900x250
 
@@ -30,8 +30,9 @@ def fetchBeatmapCover(_artist, _title, _mapper):
             pass
         checked.append(artist+title)
 
-        if(_artist == artist and _title == title):
+        if(_artist.lower() == artist.lower() and _title.lower() == title.lower()):
             bg_id = beatmap['beatmapset_id']
+            print(f'[*] cover id: {bg_id}')
             bg_url = f'https://assets.ppy.sh/beatmaps/{bg_id}/covers/cover.jpg'
             return downloadImgFromLink(bg_url, 'cover.jpg')
     return '[*] BACKGROUND NOT FOUND'
@@ -55,7 +56,6 @@ try:
     ss = cv2.imread(ss)
     height, width = ss.shape[:2]
     cropped_ss = ss[0:height//8, 0:width]
-    remove('temp.jpg')
     print('[*] successfully downloaded the screenshot')
 except IndexError:
     print('[*] WARNING: to use the generator please use "otg.py [screenshot link]"')
@@ -63,23 +63,36 @@ except IndexError:
 Recon = Recognizer()
 api = OsuApi(API)
 
+# 0: artist
+# 1: title 
+# 2: mapper
+# 3: player
 print('[*] finding metadata')
-artist = Recon.getArtist(cropped_ss)
-title = Recon.getTitle(cropped_ss)
-mapper_name = Recon.getMapper(cropped_ss)
-player_name = Recon.getPlayer(cropped_ss)
+data = [
+    Recon.getArtist(cropped_ss),
+    Recon.getTitle(cropped_ss),
+    Recon.getMapper(cropped_ss),
+    Recon.getPlayer(cropped_ss)
+]
+print(f'\n[*] FOUND: {data[0]} - {data[1]} ({data[2]}) played by {data[3]}')
 
-print(f'[*] FOUND: {artist} - {title} ({mapper_name}) played by {player_name}')
-
-res = input('[!] Please check whether the metadata is correct (type "y" if yes or correct metadata manually)\nFORMAT: artist;title;mapper;player\n')
+res = input('[!] Please check whether the metadata is correct (type "y" if yes or correct metadata manually)\nFORMAT: artist;title;mapper;player\nif a part of metadata is correct, type x, example: (artist;x;mapper;player)\n')
 if(res.lower() != 'y'):
     res = res.split(';')
-    arist, title, mapper_name, player_name = res
-    print(f'[*] corrected to: {artist} - {title} ({mapper_name}) played by {player_name}')
+    for i, md in enumerate(res):
+        if(md.lower() != 'x'):
+            metadata[i] = md
+    print(f'[*] corrected to: {data[0]} - {data[1]} ({data[2]}) played by {data[3]}')
 
 print('[*] downloading player avatar')
-player_id = api.get_user(player_name)[0]['user_id']
+player_id = api.get_user(data[3])[0]['user_id']
 player_avatar = downloadImgFromLink(f'http://s.ppy.sh/a/{player_id}', 'player_avatar.jpg')
 
 print('[*] downloading the beatmap cover')
-map_cover = fetchBeatmapCover(artist, title, mapper_name)
+map_cover = fetchBeatmapCover(data[0], data[1], data[2])
+editThumbnail(map_cover, data[0], data[1], data[3], player_avatar)
+
+# remove unnecessary files
+remove('player_avatar.jpg')
+remove('cover.jpg')
+remove('temp.jpg')
