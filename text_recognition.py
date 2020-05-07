@@ -2,18 +2,27 @@ from pytesseract import image_to_string
 class Recognizer(object):
     def getArtist(self, cropped_img):
         data = image_to_string(cropped_img)
-        data = data.split(' - ')
-        return data[0]
+        data = data.split(' — ')
+        try:
+            return data[0]
+        except IndexError:
+            return 'FAILED TO RECOGNIZE'
 
     def getTitle(self, cropped_img):
         data = image_to_string(cropped_img)
-        data = data.split(' - ')
-        return data[1].split(' [')[0]
+        data = data.split(' — ')
+        try:
+            return data[1].split(' [')[0]
+        except IndexError:
+            return 'FAILED TO RECOGNIZE'
 
     def getMapper(self, cropped_img):
         data = image_to_string(cropped_img)
         data = data.split('\n')
-        return data[1].split('y ')[1]
+        try:
+            return data[1].split('y ')[1]
+        except IndexError:
+            return 'FAILED TO RECOGNIZE'
 
     def getPlayer(self, cropped_img):
         data = image_to_string(cropped_img)
@@ -21,4 +30,4 @@ class Recognizer(object):
         try:
             return data[3].split('y ')[1].split(' on')[0]
         except IndexError:
-            return data[2].split('y ')[1].split(' on')[0]
+            return 'FAILED TO RECOGNIZE'
