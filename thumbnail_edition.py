@@ -25,19 +25,20 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
     tn[260:388, 386:514] = avatar
 
     # adding text
+    font = cv2.FONT_HERSHEY_SIMPLEX
     artistXY = (8, 160)
     titleXY = (5, 240)
     playerXY = (width/2, height/2)
     diffXY = (250, 250)
 
-    cv2.putText(tn, artist, artistXY, cv2.FONT_HERSHEY_SIMPLEX, 1.6, (0, 0, 0), 2)
-    cv2.putText(tn, artist, artistXY, cv2.FONT_HERSHEY_SIMPLEX, 1.6, (240, 240, 240), 1)
+    cv2.putText(tn, artist, artistXY, font,  1.6, (0, 0, 0), 2)
+    cv2.putText(tn, artist, artistXY, font, 1.6, (255, 255, 255), 1)
 
-    cv2.putText(tn, title, titleXY, cv2.FONT_HERSHEY_SIMPLEX, 2.6, (0, 0, 0), 4)
-    cv2.putText(tn, title, titleXY, cv2.FONT_HERSHEY_SIMPLEX, 2.6, (240, 240, 240), 2)
+    cv2.putText(tn, title, titleXY, font, 2.6, (0, 0, 0), 4)
+    cv2.putText(tn, title, titleXY, font, 2.6, (255, 255, 255), 2)
 
-    cv2.putText(tn, player, playerXY, cv2.FONT_HERSHEY_SIMPLEX, 2.4, (0, 0, 0), 3)
-    cv2.putText(tn, player, playerXY, cv2.FONT_HERSHEY_SIMPLEX, 2.4, (255, 255, 255), 1)
+    cv2.putText(tn, player, playerXY, font, 2.4, (0, 0, 0), 3)
+    cv2.putText(tn, player, playerXY, font, 2.4, (255, 255, 255), 1)
 
     # cv2.imshow('test thumbnail', tn)
     # cv2.waitKey(0)
