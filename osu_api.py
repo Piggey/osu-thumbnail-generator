@@ -12,9 +12,7 @@ class OsuApi(object):
         params = {
             'k': self.api_key,
             'u': creator,
-            'type': 'string',
-            'm': 0,
-            'a': 0
+            'type': 'string'
         }
         r = requests.get(base + '/get_beatmaps', params=params)
         return json.loads(r.text)
@@ -23,7 +21,6 @@ class OsuApi(object):
         params = {
             'k': self.api_key,
             'u': username,
-            'm': 0,
             'type': 'string'
         }
         r = requests.get(base + '/get_user', params=params)

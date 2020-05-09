@@ -1,9 +1,9 @@
+import cv2, requests
 from os.path import exists
 from os import remove
 from sys import argv
-from text_recognition import Recognizer
 from osu_api import OsuApi
-import cv2, requests
+from text_recognition import Recognizer
 from thumbnail_edition import editThumbnail
 
 # beatmap cover size: 900x250
@@ -40,15 +40,16 @@ def fetchBeatmapCover(_artist, _title, _mapper):
 # API key check
 print('[*] getting the API key')
 if(not exists('API_KEY')):
-    API = input('Please paste your osu! api key (): ')
+    API = input('Please paste your osu! api key (link here lololol): ')
     f = open('API_KEY', 'w')
     f.write(API)
     f.close()
     print('API key saved successfully')
 else:
     API = open('API_KEY').read()
-    print('[*] successfully got API key (doesnt mean its viable)')
-    
+    print('[*] successfully got API key')
+
+# downloading screenshot 
 try:
     print('[*] downloading the screenshot image from ' + argv[1])
     ss_url = argv[1]
@@ -65,32 +66,34 @@ api = OsuApi(API)
 
 # 0: artist
 # 1: title 
-# 2: mapper
-# 3: player
+# 2: difficulty
+# 3: mapper
+# 4: player
+
 print('[*] finding metadata')
 data = [
     Recon.getArtist(cropped_ss),
     Recon.getTitle(cropped_ss),
+    Recon.getDiffName(cropped_ss),
     Recon.getMapper(cropped_ss),
     Recon.getPlayer(cropped_ss)
 ]
-print(f'\n[*] FOUND: {data[0]} - {data[1]} ({data[2]}) played by {data[3]}')
-
-res = input('[!] Please check whether the metadata is correct (type "y" if yes or correct metadata manually)\nFORMAT: artist;title;mapper;player\nif a part of metadata is correct, type x, example: (artist;x;mapper;player)\n')
+print(f'\n[*] FOUND: {data[0]} - {data[1]} {data[2]} ({data[3]}) played by {data[4]}')
+res = input('[!] Please check whether the metadata is correct (type "y" if yes or correct metadata manually)\n[*] FORMAT: artist;title;difficulty;mapper;player\n[*] if a part of metadata is correct, type x, example: (artist;x;difficulty;x;player)\n[..] ')
 if(res.lower() != 'y'):
     res = res.split(';')
     for i, md in enumerate(res):
         if(md.lower() != 'x'):
-            metadata[i] = md
-    print(f'[*] corrected to: {data[0]} - {data[1]} ({data[2]}) played by {data[3]}')
+            data[i] = md
+    print(f'[*] corrected to: {data[0]} - {data[1]} {data[2]} ({data[3]}) played by {data[4]}')
 
 print('[*] downloading player avatar')
-player_id = api.get_user(data[3])[0]['user_id']
+player_id = api.get_user(data[4])[0]['user_id']
 player_avatar = downloadImgFromLink(f'http://s.ppy.sh/a/{player_id}', 'player_avatar.jpg')
 
 print('[*] downloading the beatmap cover')
-map_cover = fetchBeatmapCover(data[0], data[1], data[2])
-editThumbnail(map_cover, data[0], data[1], data[3], player_avatar)
+map_cover = fetchBeatmapCover(data[0], data[1], data[3])
+editThumbnail(map_cover, data[0], data[1], data[4], data[2], player_avatar)
 
 # remove unnecessary files
 remove('player_avatar.jpg')
