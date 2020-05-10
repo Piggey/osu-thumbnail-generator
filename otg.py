@@ -1,13 +1,13 @@
 import cv2, requests
 from os.path import exists
-from os import remove
+from os import remove, mkdir
+from shutil import rmtree
 from sys import argv
 from osu_api import OsuApi
 from text_recognition import Recognizer
 from thumbnail_edition import editThumbnail
 
 # beatmap cover size: 900x250
-
 def downloadImgFromLink(URL, new_filepath):
     with open(new_filepath, 'wb') as handle:
         response = requests.get(URL, stream=True)
@@ -34,26 +34,35 @@ def fetchBeatmapCover(_artist, _title, _mapper):
             bg_id = beatmap['beatmapset_id']
             print(f'[*] cover id: {bg_id}')
             bg_url = f'https://assets.ppy.sh/beatmaps/{bg_id}/covers/cover.jpg'
-            return downloadImgFromLink(bg_url, 'cover.jpg')
+            return downloadImgFromLink(bg_url, 'temp/cover.jpg')
     return '[*] BACKGROUND NOT FOUND'
 
-# API key check
+def checkAPI():
+    if(not exists('API_KEY')):
+        API = input('Please paste your osu! api key (link here lololol): ')
+        f = open('API_KEY', 'w')
+        f.write(API)
+        f.close()
+        print('[*] API key saved successfully')
+    else:
+        API = open('API_KEY').read()
+        print('[*] successfully got API key')
+    return API
+        
+
+# main
+try:
+    mkdir('temp')
+except FileExistsError:
+    pass
 print('[*] getting the API key')
-if(not exists('API_KEY')):
-    API = input('Please paste your osu! api key (link here lololol): ')
-    f = open('API_KEY', 'w')
-    f.write(API)
-    f.close()
-    print('API key saved successfully')
-else:
-    API = open('API_KEY').read()
-    print('[*] successfully got API key')
+API = checkAPI()
 
 # downloading screenshot 
 try:
     print('[*] downloading the screenshot image from ' + argv[1])
     ss_url = argv[1]
-    ss = downloadImgFromLink(ss_url, 'temp.jpg')
+    ss = downloadImgFromLink(ss_url, 'temp/ss.jpg')
     ss = cv2.imread(ss)
     height, width = ss.shape[:2]
     cropped_ss = ss[0:height//8, 0:width]
@@ -89,13 +98,12 @@ if(res.lower() != 'y'):
 
 print('[*] downloading player avatar')
 player_id = api.get_user(data[4])[0]['user_id']
-player_avatar = downloadImgFromLink(f'http://s.ppy.sh/a/{player_id}', 'player_avatar.jpg')
+player_avatar = downloadImgFromLink(f'http://s.ppy.sh/a/{player_id}', 'temp/player_avatar.jpg')
 
 print('[*] downloading the beatmap cover')
 map_cover = fetchBeatmapCover(data[0], data[1], data[3])
 editThumbnail(map_cover, data[0], data[1], data[4], data[2], player_avatar)
 
 # remove unnecessary files
-remove('player_avatar.jpg')
-remove('cover.jpg')
-remove('temp.jpg')
+print('[*] removing temporary files')
+rmtree('temp', ignore_errors=True)

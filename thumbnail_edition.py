@@ -1,8 +1,8 @@
 import cv2
+from os import mkdir
 # excpected output: 900x534 jpg file
 
 def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar_path):
-
     # resizing, blurring, and applying grayscale to background image
     scale = 534/250
     tn = cv2.imread(cover_filepath)
@@ -25,25 +25,43 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
     tn[260:388, 386:514] = avatar
 
     # adding text
+    black = (0, 0, 0)
+    white = (255, 255, 255)
     font = cv2.FONT_HERSHEY_SIMPLEX
-    artistXY = (8, 160)
-    titleXY = (5, 240)
-    playerXY = (width/2, height/2)
-    diffXY = (250, 250)
+    artistScale = 2
+    titleScale = 2.2
+    playerSize = cv2.getTextSize(player, font, 2.6, 3)[0]
+    diffSize = cv2.getTextSize(diffname, font, 1.8, 3)[0]
 
-    cv2.putText(tn, artist, artistXY, font,  1.6, (0, 0, 0), 2)
-    cv2.putText(tn, artist, artistXY, font, 1.6, (255, 255, 255), 1)
+    artistXY = (8, 140)
+    titleXY = (5, 230)
+    playerXY = ((tn.shape[1] - playerSize[0]) // 2, ((tn.shape[0] + playerSize[1]) // 2) + 160)
+    diffXY = ((tn.shape[1] -  diffSize[0]), 60)
 
-    cv2.putText(tn, title, titleXY, font, 2.6, (0, 0, 0), 4)
-    cv2.putText(tn, title, titleXY, font, 2.6, (255, 255, 255), 2)
+    cv2.putText(tn, artist, artistXY, font, artistScale, black, 2)
+    cv2.putText(tn, artist, artistXY, font, artistScale, white, 1)
 
-    cv2.putText(tn, player, playerXY, font, 2.4, (0, 0, 0), 3)
-    cv2.putText(tn, player, playerXY, font, 2.4, (255, 255, 255), 1)
+    cv2.putText(tn, title, titleXY, font, titleScale, black, 4)
+    cv2.putText(tn, title, titleXY, font, titleScale, white, 2)
 
-    # cv2.imshow('test thumbnail', tn)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-    cv2.imwrite(f'thumbnails/{artist} - {title} ({player}).jpg', tn)
+    cv2.putText(tn, player, playerXY, font, 2.4, black, 3)
+    cv2.putText(tn, player, playerXY, font, 2.4, white, 1)
+
+    cv2.putText(tn, diffname, diffXY, font, 1.8, black, 3)
+    cv2.putText(tn, diffname, diffXY, font, 1.8, white, 1)
+
+    # showing the image
+    cv2.imshow('thumbnail', tn)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    # saving the image
+    try:
+        mkdir('thumbnails')
+    except FileExistsError:
+        pass
+    cv2.imwrite(f'thumbnails/{artist} - {title} {diffname} ({player}).jpg', tn)
+    print(f'thumbnail saved as: {artist} - {title} {diffname} ({player}).jpg')
 
 # testing purposes
-editThumbnail('cover.jpg', 'big gay', 'Road of Resistance', 'Spare', '[Lapse]', 'player_avatar.jpg')
+# editThumbnail('temp/cover.jpg', 'imprecial dead bicycle lol', 'thats a really long title for a song', 'what', '[Big Gay]', 'temp/player_avatar.jpg')

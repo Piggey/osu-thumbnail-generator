@@ -11,4 +11,6 @@ linux: https://sourceforge.net/projects/tesseract-ocr-alt/files/tesseract-ocr-3.
 
 ### TODO
 
-osu api v2 coming soon, porting to v2 maybe?
+> port to osu api v2 when it comes out 
+> scale arist and title text so it fits the thumbnail
+> add PP score to the thumbnail
