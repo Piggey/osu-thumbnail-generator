@@ -16,3 +16,5 @@ linux: https://sourceforge.net/projects/tesseract-ocr-alt/files/tesseract-ocr-3.
 > scale arist and title text so it fits the thumbnail
 
 > add PP score to the thumbnail
+
+> make a single runnable file (?)
