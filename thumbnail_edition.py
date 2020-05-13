@@ -2,7 +2,7 @@ import cv2
 from os import mkdir
 # excpected output: 900x534 jpg file
 
-def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar_path):
+def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar_path, pp):
     # resizing, blurring, and applying grayscale to background image
     scale = 534/250
     tn = cv2.imread(cover_filepath)
@@ -16,6 +16,7 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
 
     # adding cover to background
     cover = cv2.imread(cover_filepath)
+
     # cover = addRoundedRectangleBorder(cover)
     tn[0:250, 0:900] = cover
 
@@ -37,6 +38,7 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
     titleXY = (5, 230)
     playerXY = ((tn.shape[1] - playerSize[0]) // 2, ((tn.shape[0] + playerSize[1]) // 2) + 160)
     diffXY = ((tn.shape[1] -  diffSize[0]), 60)
+    ppXY = (526, 388)
 
     cv2.putText(tn, artist, artistXY, font, artistScale, black, 2)
     cv2.putText(tn, artist, artistXY, font, artistScale, white, 1)
@@ -49,6 +51,9 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
 
     cv2.putText(tn, diffname, diffXY, font, 1.8, black, 3)
     cv2.putText(tn, diffname, diffXY, font, 1.8, white, 1)
+
+    cv2.putText(tn, pp, ppXY, font, 2.2, black, 3)
+    cv2.putText(tn, pp, ppXY, font, 2.2, white, 1)
 
     # showing the image
     cv2.imshow('thumbnail', tn)
@@ -64,4 +69,4 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
     print(f'thumbnail saved as: {artist} - {title} {diffname} ({player}).jpg')
 
 # testing purposes
-# editThumbnail('temp/cover.jpg', 'imprecial dead bicycle lol', 'thats a really long title for a song', 'what', '[Big Gay]', 'temp/player_avatar.jpg')
+editThumbnail('temp/cover.jpg', 'imprecial dead bicycle lol', 'thats a really long title for a song', 'what', '[Big Gay]', 'temp/player_avatar.jpg', '523 pp')
