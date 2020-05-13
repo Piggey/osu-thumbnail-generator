@@ -25,3 +25,14 @@ class OsuApi(object):
         }
         r = requests.get(base + '/get_user', params=params)
         return json.loads(r.text)
+
+    def get_scores(self, beatmapID, username):
+        params = {
+            'k': self.api_key,
+            'b': beatmapID,
+            'u': username,
+            'type': 'string',
+            'limit': 100
+        }
+        r = requests.get(base + '/get_scores', params=params)
+        return json.loads(r.text)
