@@ -106,6 +106,9 @@ player_avatar = downloadImgFromLink(f'http://s.ppy.sh/a/{player_id}', 'temp/play
 
 print('[*] downloading beatmap cover')
 beatmap = checkBeatmap(data[0], data[1], data[3])
+if(beatmap == -1):
+    print("[!] Beatmap not found!")
+    exit(0)
 map_cover = fetchBeatmapCover(beatmap)
 bg_id = beatmap['beatmap_id']
 
