@@ -69,4 +69,4 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
     print(f'thumbnail saved as: {artist} - {title} {diffname} ({player}).jpg')
 
 # testing purposes
-editThumbnail('temp/cover.jpg', 'imprecial dead bicycle lol', 'thats a really long title for a song', 'what', '[Big Gay]', 'temp/player_avatar.jpg', '523 pp')
+# editThumbnail('temp/cover.jpg', 'imprecial dead bicycle lol', 'thats a really long title for a song', 'what', '[Big Gay]', 'temp/player_avatar.jpg', '523 pp')
