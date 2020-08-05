@@ -112,7 +112,7 @@ if(beatmap == -1):
 map_cover = fetchBeatmapCover(beatmap)
 bg_id = beatmap['beatmap_id']
 
-pp = str(round(float(api.get_scores(bg_id, data[4])[0]['pp']))) + ' pp'
+pp = str(round(float(api.get_scores(bg_id, data[4])[0]['pp']))) + 'pp'
 print('[*] pp value: ' + pp)
 editThumbnail(map_cover, data[0], data[1], data[4], data[2], player_avatar, pp)
 
