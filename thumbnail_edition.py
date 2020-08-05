@@ -56,9 +56,9 @@ def editThumbnail(cover_filepath, artist, title, player, diffname, player_avatar
     cv2.putText(tn, pp, ppXY, font, 2.2, white, 1)
 
     # showing the image
-    cv2.imshow('thumbnail', tn)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('thumbnail', tn)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     # saving the image
     try:
