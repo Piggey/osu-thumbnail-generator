@@ -36,3 +36,13 @@ class OsuApi(object):
         }
         r = requests.get(base + '/get_scores', params=params)
         return json.loads(r.text)
+
+    def get_replay(self, beatmapID, userID):
+        params = {
+            'k': self.api_key,
+            'b': beatmapID,
+            'type': 'id',
+            'u': userID
+        }
+        r = requests.get(base + '/get_replay', params=params)
+        return json.loads(r.text)

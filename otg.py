@@ -6,6 +6,7 @@ from sys import argv
 from osu_api import OsuApi
 from text_recognition import Recognizer
 from thumbnail_edition import editThumbnail
+from base64 import b64decode
 
 # beatmap cover size: 900x250
 def downloadImgFromLink(URL, new_filepath):
@@ -52,7 +53,12 @@ def checkAPI():
         API = open('API_KEY').read()
         print('[*] successfully got API key')
     return API
-        
+
+def downloadReplay(replay, outpath):
+    data = replay['content']
+
+    with open(outpath, 'wb') as fh:
+        fh.write(b64decode(data))
 
 # main
 try:
@@ -115,6 +121,10 @@ bg_id = beatmap['beatmap_id']
 pp = str(round(float(api.get_scores(bg_id, data[4])[0]['pp']))) + 'pp'
 print('[*] pp value: ' + pp)
 editThumbnail(map_cover, data[0], data[1], data[4], data[2], player_avatar, pp)
+
+print('[*] downloading replay file')
+replay = api.get_replay(bg_id, player_id)
+downloadReplay(replay, 'temp/replay.osr')
 
 # remove unnecessary files
 print('[*] removing temporary files')
