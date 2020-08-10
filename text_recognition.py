@@ -29,7 +29,7 @@ class Recognizer(object):
         data = image_to_string(cropped_img)
         data = data.split('\n')
         try:
-            return data[3].split('y ')[1].split(' on')[0]
+            return data[2].split('by ')[1].split(' on')[0]
         except IndexError:
             return 'FAILED TO RECOGNIZE'
 
