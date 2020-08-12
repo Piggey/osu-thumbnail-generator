@@ -19,24 +19,24 @@ class Recognizer(object):
 
     def getMapper(self, cropped_img):
         data = image_to_string(cropped_img)
-        data = data.split('\n')
+        data = data.split('Beatmap by ')
         try:
-            return data[1].split('y ')[1]
+            return data[1].split('\n')[0]
         except IndexError:
             return 'FAILED TO RECOGNIZE'
 
     def getPlayer(self, cropped_img):
         data = image_to_string(cropped_img)
-        data = data.split('\n')
+        data = data.split('Played by ')
         try:
-            return data[2].split('by ')[1].split(' on')[0]
+            return data[1].split(' on')[0]
         except IndexError:
             return 'FAILED TO RECOGNIZE'
 
     def getDiffName(self, cropped_img):
         data = image_to_string(cropped_img)
+        data = data.split(' [')[1]
         try:
-            data = data.split(' [')[1]
-            return '[' + data.split(']')[0] + ']'
+            return data.split(']')[0]
         except IndexError:
             return 'FAILED TO RECOGNIZE'
