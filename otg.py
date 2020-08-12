@@ -97,14 +97,14 @@ data = [
     Recon.getMapper(cropped_ss),
     Recon.getPlayer(cropped_ss)
 ]
-print(f'\n[*] FOUND: {data[0]} - {data[1]} {data[2]} ({data[3]}) played by {data[4]}')
+print(f'\n[*] FOUND: {data[0]} - {data[1]} [{data[2]}] ({data[3]}) played by {data[4]}')
 res = input('[!] Please check whether the metadata is correct (type "y" if yes or correct metadata manually)\n[*] FORMAT: artist;title;difficulty;mapper;player\n[*] if a part of metadata is correct, type x, example: (artist;x;difficulty;x;player)\n[..] ')
 if(res.lower() != 'y'):
     res = res.split(';')
-    for i, md in enumerate(res):
-        if(md.lower() != 'x'):
-            data[i] = md
-    print(f'[*] corrected to: {data[0]} - {data[1]} {data[2]} ({data[3]}) played by {data[4]}')
+    for i, r in enumerate(res):
+        if(r.lower() != 'x'):
+            data[i] = r
+    print(f'[*] corrected to: {data[0]} - {data[1]} [{data[2]}] ({data[3]}) played by {data[4]}')
 
 print('[*] downloading player avatar')
 player_id = api.get_user(data[4])[0]['user_id']
