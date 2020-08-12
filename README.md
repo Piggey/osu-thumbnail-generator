@@ -9,6 +9,14 @@ you need tesseract-ocr to run this script you can download it from:
 
 > pip install -r -requirements.txt
 
+### if using Arch/Manjaro
+
+> sudo pacman -S tesseract leptonica tesseract-data-eng
+
+> cd osu-thumbnail-generator
+
+> pip install -r -requirements.txt
+
 ## how to use
 > python otg.py [url to scorepost image]
 
